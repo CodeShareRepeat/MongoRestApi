@@ -9,7 +9,7 @@ namespace MongoRestApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class GameInMemoryController : ControllerBase
+    public class GameInMemoryController : ControllerBase, IGamesController
     {
 
         private readonly ILogger<GameInMemoryController> _logger;
@@ -24,16 +24,26 @@ namespace MongoRestApi.Controllers
         [HttpGet("GetGame")]
         public Game GetGame(string id)
         {
-            return new Game();
+            return _dataAccess.GetGame(id);
         }
 
         [HttpPost("CreateGame")]
         public void CreateGame(Game game)
         {
+            _dataAccess.CreateGame(game);
 
         }
 
-        
-        
+        [HttpDelete("DeleteGame")]
+        public void DeleteGame(string id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [HttpGet("GetAllGames")]
+        public IEnumerable<Game> GetAllGames()
+        {
+           return _dataAccess.GetAllGames();
+        }
     }
 }

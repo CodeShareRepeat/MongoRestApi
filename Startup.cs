@@ -27,9 +27,10 @@ namespace MongoRestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IDataAccess, MongoDbDataAccess>();
 
-            services.AddSingleton<IDataAccess, InMemDataAccess>();
             services.AddControllers();
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MongoRestApi", Version = "v1" });

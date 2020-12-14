@@ -26,14 +26,15 @@ namespace MongoRestApi.DataAccess
             return gameList;
         }
 
-        public Game GetGame(Guid id)
+        public Game GetGame(string id)
         {
-            return gameList.FirstOrDefault(game  => game.Id == id);
+            return gameList.FirstOrDefault(game  => game.Id.ToString() == id);
         }
 
-        public void RemoveGame(Guid id)
+        public void RemoveGame(string id)
         {
-            var gameToRemove = gameList.FirstOrDefault(game => game.Id == id);
+            var gameToRemove = gameList.FirstOrDefault(game => game.Id.ToString() == id);
+            
             if (gameToRemove != null)
             {
                 gameList.Remove(gameToRemove );

@@ -1,19 +1,20 @@
-
 using System;
 using System.Collections.Generic;
 using MongoRestApi.Entities;
 
-namespace MongoRestApi.DataAccess
+namespace MongoRestApi.Controllers
 {
-     
-
-    public interface IDataAccess
+    public interface IGamesController
     {
-
         void CreateGame(Game game);
-        Game GetGame(string id);
+
+        void DeleteGame(string id);
+
         IEnumerable<Game> GetAllGames();
-        void RemoveGame(string id);
         
+        Game GetGame(string id);
+         
     }
+
+
 }
