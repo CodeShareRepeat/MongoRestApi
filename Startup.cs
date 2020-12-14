@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MongoRestApi.DataAccess;
 
 namespace MongoRestApi
 {
@@ -27,13 +28,12 @@ namespace MongoRestApi
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddSingleton<IDataAccess, InMemDataAccess>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MongoRestApi", Version = "v1" });
             });
-
-        services.AddSwaggerGen();
 
         }
 
