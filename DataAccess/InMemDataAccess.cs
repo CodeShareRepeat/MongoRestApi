@@ -23,14 +23,29 @@ namespace MongoRestApi.DataAccess
             return "123";
         }
 
+        public Task<string> CreateGameAsync(Game game)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<Game> GetAllGames()
         {
             return gameList;
         }
 
+        public Task<IEnumerable<Game>> GetAllGamesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         public Game GetGame(string id)
         {
             return gameList.FirstOrDefault(game  => game.Id.ToString() == id);
+        }
+
+        public Task<Game> GetGameAsync(string id)
+        {
+            throw new NotImplementedException();
         }
 
         public void RemoveGame(string id)
@@ -41,6 +56,11 @@ namespace MongoRestApi.DataAccess
             {
                 gameList.Remove(gameToRemove );
             }
+        }
+
+        public Task RemoveGameAsync(string id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

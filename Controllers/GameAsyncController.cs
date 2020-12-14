@@ -3,12 +3,14 @@ using MongoRestApi.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MongoRestApi.DataAccess;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace MongoRestApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class GameAsyncController : ControllerBase
+    public class GameAsyncController : ControllerBase, IGameAsyncController
     {
        private readonly ILogger<GameAsyncController> _logger;
         private readonly IDataAccess _dataAccess;
@@ -19,29 +21,49 @@ namespace MongoRestApi.Controllers
             _dataAccess = dataAccess;
         }
 
-        [HttpGet("GetGameAsync")]
-        public Game GetGameAsync(string id)
-        {
-            return _dataAccess.GetGame(id);
-        }
-
         [HttpPost("CreateGameAsync")]
-        public string CreateGameAsync(string name, string summary)
+        public async Task<ActionResult<Game>> CreateGameAsync(string name, string summary)
         {
-            return _dataAccess.CreateGame(new Game{ Name = name, Summary = summary});
-
+            var createdId = await _dataAccess.CreateGameAsync(new Game{ Name = name, Summary = summary});
+            
+            return CreatedAtAction(nameof(GetGameAsync), new {id = createdId}, new Game{ Id = createdId, Name = name, Summary = summary});
         }
 
         [HttpDelete("DeleteGameAsync")]
-        public void DeleteGameAsync(string id)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> DeleteGameAsync(string id)
         {
-            throw new System.NotImplementedException();
+           var existingItem = await _dataAccess.GetGameAsync(id);
+
+            if (existingItem is null)
+            {
+                return NotFound();
+            }
+
+            await _dataAccess.RemoveGameAsync(id);
+
+            return NoContent();
         }
 
-        [HttpGet("GetAllGames")]
-        public IEnumerable<Game> GetAllGamesAsync()
+        [HttpGet("GetAllGamesAsync")]
+        public async Task<IEnumerable<Game>> GetAllGamesAsync()
         {
-           return _dataAccess.GetAllGames();
+            return await _dataAccess.GetAllGamesAsync();
+        }
+
+        [HttpGet("GetGameAsync")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Game>> GetGameAsync(string id)
+        { 
+            var gameFound = await _dataAccess.GetGameAsync(id);
+
+            if (gameFound == null)
+                return NotFound();
+            
+            return gameFound;
+
         }
     }
 }

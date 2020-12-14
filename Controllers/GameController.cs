@@ -41,6 +41,7 @@ namespace MongoRestApi.Controllers
         public ActionResult<Game> CreateGame(string name, string summary)
         {
             var createdId = _dataAccess.CreateGame(new Game{ Name = name, Summary = summary});
+            
             return CreatedAtAction(nameof(GetGame), new {id = createdId}, new Game{ Id = createdId, Name = name, Summary = summary});
         }
        

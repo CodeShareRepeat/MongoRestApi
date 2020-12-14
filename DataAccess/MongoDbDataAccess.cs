@@ -50,6 +50,27 @@ namespace MongoRestApi.DataAccess
             mongoCollection.DeleteOne(toDelete => toDelete.Id == id);
         }
 
-        
+        public async Task<string> CreateGameAsync(Game game)
+        {
+            await mongoCollection.InsertOneAsync(game);
+            var id = game.Id;
+            return id;
+        }
+
+        public async Task<Game> GetGameAsync(string id)
+        {
+            var filter = filterBuilder.Eq(gameInDB => gameInDB.Id, id);
+            return await mongoCollection.Find(filter).SingleOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Game>> GetAllGamesAsync()
+        {
+            return await mongoCollection.Find(new BsonDocument()).ToListAsync<Game>();
+        }
+
+        public async Task RemoveGameAsync(string id)
+        {
+            await mongoCollection.DeleteOneAsync(toDelete => toDelete.Id == id);
+        }
     }
 }
