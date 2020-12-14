@@ -3,6 +3,7 @@ using MongoRestApi.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MongoRestApi.DataAccess;
+using Microsoft.AspNetCore.Http;
 
 namespace MongoRestApi.Controllers
 {
@@ -21,28 +22,44 @@ namespace MongoRestApi.Controllers
         }
 
         [HttpGet("GetGame")]
-        public Game GetGame(string id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Game> GetGame(string id)
         {
-            return _dataAccess.GetGame(id);
+            var gameToFind = _dataAccess.GetGame(id);
+
+            if (gameToFind == null)
+                return NotFound();
+            
+            return Ok(gameToFind);
+
         }
 
         [HttpPost("CreateGame")]
-        public string CreateGame(string name, string summary)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] 
+        public ActionResult<Game> CreateGame(string name, string summary)
         {
-            return _dataAccess.CreateGame(new Game{ Name = name, Summary = summary});
-
+            var createdId = _dataAccess.CreateGame(new Game{ Name = name, Summary = summary});
+            return CreatedAtAction(nameof(GetGame), new {id = createdId}, new Game{ Id = createdId, Name = name, Summary = summary});
         }
+       
 
+      
         [HttpDelete("DeleteGame")]
-        public void DeleteGame(string id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult DeleteGame(string id)
         {
-            throw new System.NotImplementedException();
+           _dataAccess.RemoveGame(id);
+           return Ok();
         }
 
         [HttpGet("GetAllGames")]
-        public IEnumerable<Game> GetAllGames()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<Game>> GetAllGames()
         {
-           return _dataAccess.GetAllGames();
+           return Ok(_dataAccess.GetAllGames());
         }
     }
 }

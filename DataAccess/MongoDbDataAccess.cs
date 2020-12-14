@@ -47,7 +47,7 @@ namespace MongoRestApi.DataAccess
 
         public void RemoveGame(string id)
         {
-            throw new NotImplementedException();
+            mongoCollection.DeleteOne(toDelete => toDelete.Id == id);
         }
 
         
