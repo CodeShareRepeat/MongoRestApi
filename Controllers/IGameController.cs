@@ -4,9 +4,9 @@ using MongoRestApi.Entities;
 
 namespace MongoRestApi.Controllers
 {
-    public interface IGamesController
+    public interface IGameController
     {
-        void CreateGame(Game game);
+        string CreateGame(string name, string summary);
 
         void DeleteGame(string id);
 

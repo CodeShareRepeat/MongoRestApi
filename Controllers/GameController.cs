@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using MongoRestApi.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,13 +8,13 @@ namespace MongoRestApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class GameInMemoryController : ControllerBase, IGamesController
+    public class GameController : ControllerBase, IGameController
     {
 
-        private readonly ILogger<GameInMemoryController> _logger;
+        private readonly ILogger<GameController> _logger;
         private readonly IDataAccess _dataAccess;
 
-        public GameInMemoryController(ILogger<GameInMemoryController> logger, IDataAccess dataAccess )
+        public GameController(ILogger<GameController> logger, IDataAccess dataAccess )
         {
             _logger = logger;
             _dataAccess = dataAccess;
@@ -28,9 +27,9 @@ namespace MongoRestApi.Controllers
         }
 
         [HttpPost("CreateGame")]
-        public void CreateGame(Game game)
+        public string CreateGame(string name, string summary)
         {
-            _dataAccess.CreateGame(game);
+            return _dataAccess.CreateGame(new Game{ Name = name, Summary = summary});
 
         }
 

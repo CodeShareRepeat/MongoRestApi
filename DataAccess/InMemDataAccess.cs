@@ -16,9 +16,11 @@ namespace MongoRestApi.DataAccess
                 new Game {  Name = "Diablo 2", Summary = "wow!" }
             };
 
-        public void CreateGame(Game game)
+        public string CreateGame(Game game)
         {
-            gameList.Add(game);
+            
+            gameList.Add(new Game{});
+            return "123";
         }
 
         public IEnumerable<Game> GetAllGames()

@@ -10,7 +10,7 @@ namespace MongoRestApi.DataAccess
     public interface IDataAccess
     {
 
-        void CreateGame(Game game);
+        string CreateGame(Game game);
         Game GetGame(string id);
         IEnumerable<Game> GetAllGames();
         void RemoveGame(string id);
