@@ -16,9 +16,11 @@ namespace MongoRestApi.DataAccess
                 new Game {  Name = "Diablo 2", Summary = "wow!" }
             };
 
-        public void CreateGame(Game game)
+        public string CreateGame(Game game)
         {
-            gameList.Add(game);
+            
+            gameList.Add(new Game{});
+            return "123";
         }
 
         public IEnumerable<Game> GetAllGames()
@@ -26,14 +28,15 @@ namespace MongoRestApi.DataAccess
             return gameList;
         }
 
-        public Game GetGame(Guid id)
+        public Game GetGame(string id)
         {
-            return gameList.FirstOrDefault(game  => game.Id == id);
+            return gameList.FirstOrDefault(game  => game.Id.ToString() == id);
         }
 
-        public void RemoveGame(Guid id)
+        public void RemoveGame(string id)
         {
-            var gameToRemove = gameList.FirstOrDefault(game => game.Id == id);
+            var gameToRemove = gameList.FirstOrDefault(game => game.Id.ToString() == id);
+            
             if (gameToRemove != null)
             {
                 gameList.Remove(gameToRemove );
